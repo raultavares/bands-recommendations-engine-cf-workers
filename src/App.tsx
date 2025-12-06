@@ -68,32 +68,55 @@ function App() {
   return (
     <main
       style={{
-        maxWidth: "720px",
-        margin: "2rem auto",
-        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+        width: "640px",
+        margin: "0 auto",
+        padding: "3rem 1rem",
+        textAlign: "center",
       }}
     >
-      <h1>Band Recommender</h1>
-      <p>Type a band name (e.g. Ghost) and get similar bands.</p>
+      <h1
+        style={{
+          fontSize: "2.5rem",
+          fontWeight: 700,
+          marginBottom: "2rem",
+          color: "white",
+        }}
+      >
+        Artist Affinity Engine
+      </h1>
+      <p>Type a band name (e.g. Ghost) and get similar artists.</p>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: "1.5rem" }}>
+      <form onSubmit={handleSubmit} style={{ marginBottom: "2rem" }}>
         <input
+          name="artist-input"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder=""
           style={{
-            padding: "0.6rem 0.8rem",
-            width: "70%",
-            maxWidth: "380px",
-            marginRight: "0.5rem"
+            padding: "15px 0 15px 15px",
+            width: "97%",
+            borderRadius: "6px",
+            border: "1px solid #aaa",
+            background: "#2a2a2a",
+            color: "white",
+            marginBottom: "1rem",
+            fontSize: "1rem",
+            fontFamily: 'inherit',
+            fontWeight: 'bold'
           }}
         />
         <button
           type="submit"
           disabled={loading}
           style={{
-            padding: "0.6rem 0.9rem",
-            cursor: loading ? "default" : "pointer"
+            padding: "0.8rem 1.2rem",
+            background: "#ff7f11",
+            color: "black",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontWeight: 700,
+            fontSize: "1rem",
           }}
         >
           {loading ? "Searching..." : "Get recommendations"}
@@ -113,34 +136,48 @@ function App() {
       )}
 
       {results.length > 0 && (
-        <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
+        <ul
+          style={{
+            listStyle: "none",
+            padding: 0,
+            marginTop: "2rem",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "1.2rem",
+          }}
+        >
 
-          {results.map((band) => {
+          {results.map((band, index) => {
             const flagUrl = getFlagUrl(band.country_code);
 
             return (
               <li
                 key={band.id}
+                className="fade-in"
                 style={{
-                  border: "1px solid #ddd",
+                  animationDelay: `${index * 0.05}s`,
+                  background: "#222",
+                  border: "1px solid #333",
                   borderRadius: "8px",
-                  padding: "0.8rem 1rem",
-                  marginBottom: "0.75rem"
+                  padding: "1rem",
+                  color: "white",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  
+                <div style={{ alignItems: "center", gap: "0.5rem" }}>
+
                   <div>
-                    <strong>{band.name}</strong>{" "}
+                    <strong style={{
+                      marginRight: "10px"
+                    }}>{band.name}</strong>{" "}
                     {flagUrl && (
-                    <img
-                      src={flagUrl}
-                      alt={band.country ? `${band.country} flag` : "Country flag"}
-                      width={24}
-                      height={18}
-                      style={{ borderRadius: "2px", flexShrink: 0 }}
-                    />
-                  )}
+                      <img
+                        src={flagUrl}
+                        alt={band.country ? `${band.country} flag` : "Country flag"}
+                        width={24}
+                        height={18}
+                        style={{ borderRadius: "2px", flexShrink: 0 }}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -148,9 +185,9 @@ function App() {
                   <div style={{ fontSize: "0.9rem", color: "#555" }}>{band.genre}</div>
                 )}
                 {band.description && (
-                  <p style={{ marginTop: "0.4rem" }}>{band.description}</p>
+                  <p style={{ marginTop: "0.4rem", minHeight: "72px" }}>{band.description}</p>
                 )}
-                <div style={{ fontSize: "0.8rem", color: "#777" }}>
+                <div style={{ fontSize: "0.8rem", color: "#777", marginBottom: "15px" }}>
                   {typeof band.score === "number" &&
                     `similarity: ${band.score.toFixed(3)} `}
                   {typeof band.popularity === "number" &&
@@ -161,11 +198,18 @@ function App() {
                     href={band.spotify_url}
                     target="_blank"
                     rel="noreferrer"
-                    style={{ fontSize: "0.8rem" }}
+                    style={{ fontSize: "0.8rem", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
                   >
-                    Open on Spotify
+                    <img
+                      src="https://cdn.simpleicons.org/spotify/1DB954"
+                      alt="Spotify"
+                      width={18}
+                      height={18}
+                      style={{ display: "block" }}
+                    />
                   </a>
                 )}
+
               </li>
             );
           })}
