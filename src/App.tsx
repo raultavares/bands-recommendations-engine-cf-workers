@@ -4,6 +4,7 @@ type Band = {
   id: number;
   name: string;
   country?: string;
+  country_code?: string;
   genre?: string;
   description?: string;
   decade?: string;
@@ -13,6 +14,11 @@ type Band = {
 };
 
 const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+
+const getFlagUrl = (countryCode?: string) => {
+  if (!countryCode) return null;
+  return `https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`;
+};
 
 function App() {
   const [query, setQuery] = useState("Ghost");
@@ -74,7 +80,7 @@ function App() {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ghost"
+          placeholder=""
           style={{
             padding: "0.6rem 0.8rem",
             width: "70%",
@@ -108,48 +114,63 @@ function App() {
 
       {results.length > 0 && (
         <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
-          {results.map((band) => (
-            <li
-              key={band.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "0.8rem 1rem",
-                marginBottom: "0.75rem"
-              }}
-            >
-              <div>
-                <strong>{band.name}</strong>{" "}
-                {band.country && (
-                  <span style={{ color: "#666" }}>({band.country})</span>
-                )}
-              </div>
-              {band.genre && (
-                <div style={{ fontSize: "0.9rem", color: "#555" }}>
-                  {band.genre}
+
+          {results.map((band) => {
+            const flagUrl = getFlagUrl(band.country_code);
+
+            return (
+              <li
+                key={band.id}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  padding: "0.8rem 1rem",
+                  marginBottom: "0.75rem"
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  
+                  <div>
+                    <strong>{band.name}</strong>{" "}
+                    {flagUrl && (
+                    <img
+                      src={flagUrl}
+                      alt={band.country ? `${band.country} flag` : "Country flag"}
+                      width={24}
+                      height={18}
+                      style={{ borderRadius: "2px", flexShrink: 0 }}
+                    />
+                  )}
+                  </div>
                 </div>
-              )}
-              {band.description && (
-                <p style={{ marginTop: "0.4rem" }}>{band.description}</p>
-              )}
-              <div style={{ fontSize: "0.8rem", color: "#777" }}>
-                {typeof band.score === "number" &&
-                  `similarity: ${band.score.toFixed(3)} `}
-                {typeof band.popularity === "number" &&
-                  `(popularity: ${band.popularity})`}
-              </div>
-              {band.spotify_url && (
-                <a
-                  href={band.spotify_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: "0.8rem" }}
-                >
-                  Open on Spotify
-                </a>
-              )}
-            </li>
-          ))}
+
+                {band.genre && (
+                  <div style={{ fontSize: "0.9rem", color: "#555" }}>{band.genre}</div>
+                )}
+                {band.description && (
+                  <p style={{ marginTop: "0.4rem" }}>{band.description}</p>
+                )}
+                <div style={{ fontSize: "0.8rem", color: "#777" }}>
+                  {typeof band.score === "number" &&
+                    `similarity: ${band.score.toFixed(3)} `}
+                  {typeof band.popularity === "number" &&
+                    `(popularity: ${band.popularity})`}
+                </div>
+                {band.spotify_url && (
+                  <a
+                    href={band.spotify_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    Open on Spotify
+                  </a>
+                )}
+              </li>
+            );
+          })}
+
+
         </ul>
       )}
     </main>
