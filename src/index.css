@@ -86,3 +86,19 @@ button:focus-visible {
     opacity: 1;
   }
 }
+
+main {
+  width: min(100%, 640px) !important;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  main {
+    width: 100% !important;
+  }
+
+  main ul {
+    grid-template-columns: 1fr !important;
+  }
+}
