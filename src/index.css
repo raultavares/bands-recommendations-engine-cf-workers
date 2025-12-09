@@ -87,15 +87,10 @@ button:focus-visible {
   }
 }
 
-main {
-  width: min(100%, 640px) !important;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   main {
     width: 100% !important;
+    box-sizing: border-box;
   }
 
   main ul {
