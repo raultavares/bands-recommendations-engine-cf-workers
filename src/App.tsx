@@ -9,6 +9,7 @@ type Band = {
   description?: string;
   decade?: string;
   spotify_url?: string;
+  sample_url?: string;
   popularity?: number;
   score?: number;
 };
@@ -193,22 +194,49 @@ function App() {
                   {typeof band.popularity === "number" &&
                     `(popularity: ${band.popularity})`}
                 </div>
-                {band.spotify_url && (
-                  <a
-                    href={band.spotify_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ fontSize: "0.8rem", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
-                  >
-                    <img
-                      src="https://cdn.simpleicons.org/spotify/1DB954"
-                      alt="Spotify"
-                      width={18}
-                      height={18}
-                      style={{ display: "block" }}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.75rem",
+                    marginTop: "0.5rem",
+                    flexWrap: "wrap"
+                  }}
+                >
+                  {band.spotify_url && (
+                    <a
+                      href={band.spotify_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        fontSize: "0.8rem",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        textDecoration: "none",
+                        color: "#1DB954"
+                      }}
+                    >
+                      <img
+                        src="https://cdn.simpleicons.org/spotify/1DB954"
+                        alt="Spotify"
+                        width={18}
+                        height={18}
+                        style={{ display: "block" }}
+                      />
+                      <span>Open on Spotify</span>
+                    </a>
+                  )}
+
+                  {band.sample_url && (
+                    <audio
+                      src={band.sample_url}
+                      controls
+                      style={{ height: "28px" }}
                     />
-                  </a>
-                )}
+                  )}
+                </div>
+
 
               </li>
             );
